@@ -1,15 +1,14 @@
 import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import { sendWhatsappMessage } from './services/twillio';
+import { PORT } from './constants/environment';
 
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
-dotenv.config()
 
 const port = 3000
 
@@ -24,6 +23,6 @@ app.post('/chat/send', async (req: Request<any>, res: Response<any>) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 })
