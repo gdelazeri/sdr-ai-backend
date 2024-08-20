@@ -15,7 +15,7 @@ const port = 3000
 app.post('/chat/send', async (req: Request<any>, res: Response<any>) => {
   const { to, body } = req.body
   try {
-    await sendWhatsappMessage(to, body)
+    await sendWhatsappMessage(`whatsapp:${to}`, body)
     res.status(200).json({ success: true })
   } catch (error) {
     res.status(500).json({ success: false, error })
