@@ -9,7 +9,19 @@ export const getOpenAiChatCompletion = async (input: string): Promise<string | n
   try {
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o-mini',
-      messages: [{ role: 'user', content: input }]
+      messages: [
+        {
+          "role": "system",
+          "content": "You will be provided with text, and your task is to translate it into emojis. Do not use any regular text. Do your best with emojis only."
+        },
+        {
+          "role": "user",
+          "content": input
+        }
+      ],
+      temperature: 0.8,
+      max_tokens: 64,
+      top_p: 1
     })
     return completion.choices[0].message.content
   } catch (error) {
