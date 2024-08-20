@@ -8,7 +8,7 @@ const openai = new OpenAI({
 export const getOpenAiChatCompletion = async (input: string): Promise<string | null> => {
   try {
     const completion = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
+      model: 'gpt-4o-mini',
       messages: [{ role: 'user', content: input }]
     })
     return completion.choices[0].message.content
