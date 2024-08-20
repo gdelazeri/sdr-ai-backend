@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import { sendWhatsappMessage } from './services/twillio';
 import { PORT } from './constants/environment';
+import { getOpenAiChatCompletion } from './services/openai';
 
 const app = express();
 
@@ -27,8 +28,10 @@ app.post('/chat/receive', async (req: Request<any>, res: Response<any>) => {
   
   const messageReceived = twiloBody.Body
   const to = twiloBody.From
+
   try {
-    await sendWhatsappMessage(to, messageReceived)
+    const completion = await getOpenAiChatCompletion(messageReceived)
+    await sendWhatsappMessage(to, completion)
     res.status(200).json({ success: true })
   } catch (error) {
     res.status(500).json({ success: false, error })
