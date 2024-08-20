@@ -11,8 +11,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
 
-const port = 3000
-
 app.post('/chat/send', async (req: Request<any>, res: Response<any>) => {
   const { to, body } = req.body
   try {
@@ -24,14 +22,13 @@ app.post('/chat/send', async (req: Request<any>, res: Response<any>) => {
 });
 
 app.post('/chat/receive', async (req: Request<any>, res: Response<any>) => {
-  const twiloBody = req.body
-  
-  const messageReceived = twiloBody.Body
-  const to = twiloBody.From
+  const { Body: messageReceived, From: to } = req.body
 
   try {
     const completion = await getOpenAiChatCompletion(messageReceived)
-    await sendWhatsappMessage(to, completion)
+    if (completion) {
+      await sendWhatsappMessage(to, completion)
+    }
     res.status(200).json({ success: true })
   } catch (error) {
     res.status(500).json({ success: false, error })
