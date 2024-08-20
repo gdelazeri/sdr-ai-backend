@@ -14,9 +14,21 @@ const port = 3000
 
 app.post('/chat/send', async (req: Request<any>, res: Response<any>) => {
   const { to, body } = req.body
-  console.log({ to, body })
   try {
     await sendWhatsappMessage(to, body)
+    res.status(200).json({ success: true })
+  } catch (error) {
+    res.status(500).json({ success: false, error })
+  }
+});
+
+app.post('/chat/receive', async (req: Request<any>, res: Response<any>) => {
+  const twiloBody = req.body
+  
+  const messageReceived = twiloBody.Body
+  const to = twiloBody.From
+  try {
+    await sendWhatsappMessage(to, messageReceived)
     res.status(200).json({ success: true })
   } catch (error) {
     res.status(500).json({ success: false, error })
